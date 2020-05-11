@@ -105,9 +105,9 @@ obj
 		verb
 			get()						//obj/gold/verb/get()
 				set src in view(0)		//src must be close
-				if (usr.bolt + amount >= 900)
+				if (usr.bolt + amount >= 999)
 					usr << "You bolt capacity is full."
-					usr.bolt = 900
+					usr.bolt = 999
 				else
 					usr << "You picked up [amount] bolts."
 					usr.bolt += amount
@@ -118,12 +118,16 @@ obj
 			get()
 				set src in oview(0)
 				usr << "You drunk the strength elixir!"
-				usr.power += 3
+				usr.pp += 3
 				del(src)
 
 	person
 		icon ='person.dmi'
 		density = 1
+
+		generic
+			icon_state = "neuter"
+
 		girl
 			icon_state = "female"
 			verb
@@ -167,7 +171,7 @@ obj
 							usr << "Katniss: ..."
 							usr << "Katniss: That isn't a bad thing to try."
 							usr << "Katniss: I'll see how it goes"
-							src.loc = locate(14,4,4)
+							src.loc = locate(14,16,4)
 							prog = 6
 						else if (prog == 6)
 							usr << "Katniss: It's actually pretty fun."
@@ -182,7 +186,7 @@ obj
 					set src in view(1)
 					if (prog < 2)
 						usr << "Man: These sandstorms are really tough to navagate."
-						usr << "Man: I've put these flags up so you know where the storms the thickest."
+						usr << "Man: I've put these flags up so you know where the storms the thinnest."
 						usr << "Man: After that though, your on your own."
 						usr << "Man: It's like a maze, but you can't see the walls."
 					else if (prog == 2)
@@ -212,7 +216,7 @@ obj
 						usr << "Old man: I can however, tend to your wounds if you wish."
 						usr << "Old man: Just speak to me and I will help."
 						prog = 3
-						usr.power = 16
+						usr.pp += 6
 						if (usr.hpmax < 200)
 							usr.hpmax = 200
 					if (prog == 3)
@@ -234,7 +238,7 @@ obj
 						usr << "Henry Sett: Hmm what's that? Sean says he's sorry?"
 						usr << "Henry: For what? He still thinks it was his fault?"
 						usr << "Henry: Tell Sean to come over here and that I forgive him."
-					if (prog == 5)
+					if (prog >= 5)
 						usr << "Henry: Thank you for taking your time to get Sean back."
 						usr << "Henry: I have a legend that'll be useful on your quest."
 						usr << "Henry: Deep inside the caves there lies a cracked wall."
@@ -254,12 +258,14 @@ obj
 			verb
 				talk()
 					set src in view(1)
-					usr.hpmax = 333
-					usr.power += 6
+					usr.hpmax = 250
+					usr.hp = 250
+					usr.pp += 6
 					usr << "Marcus: The enemy you are about to face is extremely powerful."
 					usr << "Marcus: Beyond this point you are alone."
 					usr << "Marcus: Alone to face evil in the most horrid way."
 					usr << "Marcus: I give you my spirit to take the challenge."
+					usr << "Marcus: Once you set foot to fight the final boss, you cannot return through normal means"
 					del(src)
 
 	guard
@@ -275,7 +281,7 @@ obj
 							usr << "Guard: Hey it's Marcus! You can come in."
 							src.loc = locate(4,16,3)
 						else
-							usr << "Guard: Sorry. Your not allowed in."
+							usr << "Guard: Sorry. You're not allowed in."
 
 		kinghall
 			verb
@@ -286,7 +292,7 @@ obj
 							usr << "Guard: Hey it's Marcus! Come on in!"
 							src.loc = locate(4,16,4)
 						else
-							usr << "Guard: Sorry. Your not allowed in."
+							usr << "Guard: Sorry. You're not allowed in."
 					else
 						usr << "Guard: I wonder if our next king is going to be better."
 						usr << "Guard: He was blinded by greed. I sense a new beginning."
@@ -314,7 +320,7 @@ obj
 							if (equip != null)
 								usr << "Guard: Marcus? Ok, go through."
 							else
-								usr << "Guard: Marcus, I`ll let you pass, but you should show that sword in here."
+								usr << "Guard: Sorry, I can not allow you to pass with that weapon."
 							src.loc = locate(10,8,5)
 						else
 							usr << "Guard: Sorry visitor. Your not allowed past this point."
@@ -345,8 +351,9 @@ obj
 						usr << "Guard: There is nothing to heal poison."
 						usr << "Guard: The instant you get an overdose, it's game over."
 						src.loc = locate(8,16,4)
-					usr << "Guard: I'm sorry, but this area is off limits."
-					usr << "Guard: It's the ****hing final boss!!!"
+					else
+						usr << "Guard: I'm sorry, but this area is off limits."
+						usr << "Guard: It's the ****hing final boss!!!"
 		southgate
 			verb
 				talk()
@@ -408,18 +415,18 @@ obj
 				talk()
 					set src in view(0)
 					if (prog == 1)
-						usr << "Blacksmith: Buy our armour to reduce damage by 5."
+						usr << "Blacksmith: Buy our armour to reduce damage by 5. Only 50 bolts!"
 					else if (prog == 2)
-						usr << "Blacksmith: I've found a new technique to increase the armour thricefold!"
+						usr << "Blacksmith: I've found a new technique to increase the armour thricefold! Only 60 bolts!"
 					else if (prog == 3)
 						usr << "Blacksmith: The villigers are never satisfied."
 						usr << "Blacksmith: They want it harder, stronger, lighter."
 						usr << "Blacksmith: Oh well, I changed the formula for the plating."
-						usr << "Blacksmith: It shalln't be much, but every little thing counts right?"
+						usr << "Blacksmith: It shalln't be much, but every little thing counts right? Only 70 bolts!"
 					else if (prog == 4)
 						usr << "Blacksmith: You seem to use the armour extensively."
 						usr << "Blacksmith: This new armour will be able to last even more attacks."
-						usr << "Blacksmith: It's only slightly heavier, but folks are already complaining about it."
+						usr << "Blacksmith: It's only slightly heavier, but folks are already complaining about it. Only 80 bolts!"
 					else if (prog == 5)
 						usr << "Blacksmith: It's a pain to work alone..."
 						usr << "Blacksmith: Maybe if I had a student to teach."
@@ -431,10 +438,10 @@ obj
 						if (wforce == 1)
 							usr << "Blacksmith: Is that the force hammer?"
 							usr << "Blacksmith: I will be able to forge the perfect armour with this!"
-							usr << "Blacksmith: You won't have to pay me."
-							usr << "Blacksmith: Just give it to me for a sec."
+							usr << "Blacksmith: Just let me borrwow it to me for a sec. That'll run you 100 bolts."
 
 				buy_armour()
+					set src in view(0)
 					if (prog == 1)
 						if (usr.bolt >= 50)
 							if (usr.armour == 5)
@@ -448,46 +455,55 @@ obj
 						else
 							usr << "Blacksmith: The armour costs 50 bolts."
 					else if (prog == 2)
-						if (usr.bolt >= 64)
+						if (usr.bolt >= 60)
 							if (usr.armour == 15)
 								usr << "Blacksmith: You've already bought it."
 								usr << "Blacksmith: No use to buy more then one."
 							else
-								usr.bolt -= 64
+								usr.bolt -= 60
 								usr.armour = 15
 								usr << "Blacksmith: Here you go."
 								usr << "Blacksmith: This is the Grand Armour."
 						else
-							usr << "Blacksmith: The armour costs 64 bolts."
+							usr << "Blacksmith: The armour costs 60 bolts."
 					else if (prog == 3)
-						if (usr.bolt >= 25)
+						if (usr.bolt >= 70)
 							if (usr.armour == 17)
 								usr << "Blacksmith: You've already bought it."
 								usr << "Blacksmith: No use to buy more then one."
 							else
-								usr.bolt -= 25
+								usr.bolt -= 70
 								usr.armour = 17
 								usr << "Blacksmith: Here you go."
 								usr << "Blacksmith: This is the Magical Armour."
 						else
-							usr << "Blacksmith: The armour costs 64 bolts."
+							usr << "Blacksmith: The armour costs 70 bolts."
 					else if (prog == 4)
-						if (usr.bolt >= 50)
+						if (usr.bolt >= 80)
 							if (usr.armour == 20)
 								usr << "Blacksmith: You've already bought it."
 								usr << "Blacksmith: No use to buy more then one."
 							else
-								usr.bolt -= 50
+								usr.bolt -= 80
 								usr.armour = 20
 								usr << "Blacksmith: Here you go."
 								usr << "Blacksmith: This is the Ironclad Armour."
 						else
-							usr << "Blacksmith: The armour costs 64 bolts."
+							usr << "Blacksmith: The armour costs 80 bolts."
 					else if (prog == 6)
-						usr.armour = 30
-						usr << "Blacksmith: Thanks for the hammer."
-						usr << "Blacksmith: This is it."
-						usr << "Blacksmith: This is the Perfect Armour."
+						if (usr.bolt >= 100)
+							if (usr.armour == 30)
+								usr << "Blacksmith: This is it."
+								usr << "Blacksmith: This is the Perfect Armour."
+							else
+								usr.bolt -= 100
+								usr.armour = 30
+								usr << "Blacksmith: This is it."
+								usr << "Blacksmith: This is the Perfect Armour."
+
+						else
+							usr << "Blacksmith: The armour costs 100 bolts."
+
 
 	healer
 		icon = 'start.dmi'
@@ -639,6 +655,7 @@ obj
 					for (var/turf/wall/stall/S in world)
 						S.density = 0
 				else
+					usr << "But have you collected all 5 Arms???"
 					usr.loc = locate(11,13,8)
 		warpEscape
 			verb/enter()
@@ -760,7 +777,6 @@ obj
 				wield()
 					set src in view(0)
 					wblade = 1
-					usr.power = 8
 					usr << "You can now use the legendary radiant blade."
 					usr << "Type 'blade' to equip the radiant blade."
 					for(var/turf/wall/tree/T in world)
@@ -773,7 +789,6 @@ obj
 					set src in view(0)
 					wcross = 1
 					prog = 1
-					usr.power = 10
 					usr << "You can now use the forbidden gluttony crossbow."
 					usr << "Type 'cross' to equip the gluttony crossbow."
 					del(src)
@@ -784,15 +799,17 @@ obj
 					set src in view(0)
 					wstaff = 1
 					prog = 2
-					usr.power = 14
 					for (var/obj/flag/F in world)
 						del(F)
 					for (var/turf/floor/moth/M in world)
 						M.icon = 'sand.dmi'
 						M.icon_state = "calm"
+						M.opacity = 0
+						M.density = 0
 					for (var/turf/wall/moth/W in world)
 						W.icon = 'sand.dmi'
 						W.icon_state = "calm"
+						W.density = 0
 					usr << "You can now use the great youth staff."
 					usr << "Type 'staff' to equip the youth staff."
 					del(src)
@@ -806,7 +823,6 @@ obj
 						usr << "You don't know where it's been."
 					else
 						prog = 4
-						usr.power = 20
 						usr << "You have found the old man's treasure."
 						del(src)
 		force
@@ -841,7 +857,39 @@ mob
 		usr.hpmax = 90
 		usr.power = 4
 		usr.armour = 1
+		usr.pp = 0
 		..()
+
+	Stat()
+		statpanel("Status")	//Your Inventory panel
+		stat("Key:[key]")
+		stat("Alias:[name]")
+		stat("Health: [src.hp]/[src.hpmax]")
+		stat("Poison (100=game over): [poison]%")
+		stat("Power: [src.power+src.pp]")
+		stat("Armour: [src.armour]")
+		stat("Story Progression: [prog/7]%")
+		stat("You have:")
+		stat("Gold x [src.bolt]")
+		stat("Potions x [src.potion]")
+		stat("___Arms___")
+		if (!equip)
+			if (wblade || wcross || wstaff || wspear || wforce)
+				stat("You are unarmed! Better equip a weapon!")
+			else
+				stat("You are unarmed ;_;")
+		else
+			stat("currently equipped: [equip]")
+		if (wblade == 1)
+			stat("Radiant Blade. Type 'blade' to equip")
+		if (wcross== 1)
+			stat("Gluttony Crossbow. Type 'cross' to equip")
+		if (wstaff == 1)
+			stat("Youth Staff. Type 'staff' to equip")
+		if (wspear == 1)
+			stat("Critical Piercing Spear. Type 'spear' to equip")
+		if (wforce == 1)
+			stat("Cracking Force Hammer. Type 'force' to equip")
 
 	Del()
 		var/obj/gold/G = new(loc)	//create new object G
@@ -856,6 +904,7 @@ mob
 		potion = 1
 		poison
 		power
+		pp
 
 	bug
 		icon = 'bug.dmi'
@@ -878,16 +927,16 @@ mob
 		icon_state = "armoured"
 		hp = 45
 		hpmax = 45
-		power = 4
-		armour = 21
+		power = 15
+		armour = 40
 
 	armoured_moth
 		icon = 'moth.dmi'
 		icon_state = "armoured"
 		hp = 60
 		hpmax = 60
-		power = 6
-		armour = 21
+		power = 18
+		armour = 40
 
 	unbreakable
 		bug
@@ -895,7 +944,7 @@ mob
 			icon_state = "unbreakable"
 			hp = 75
 			hpmax = 75
-			power = 10
+			power = 20
 			armour = 6
 
 		moth
@@ -903,7 +952,7 @@ mob
 			icon_state = "unbreakable"
 			hp = 100
 			hpmax = 100
-			power = 16
+			power = 27
 			armour = 9
 
 	ranged
@@ -912,7 +961,7 @@ mob
 			icon_state = "ranged"
 			hp = 40
 			hpmax = 40
-			power = 8
+			power = 15
 			armour = 4
 
 		moth
@@ -920,7 +969,7 @@ mob
 			icon_state = "ranged"
 			hp = 60
 			hpmax = 60
-			power = 10
+			power = 18
 			armour = 6
 
 	poisoned
@@ -944,7 +993,7 @@ mob
 			icon_state = "evil"
 			hp = 100
 			hpmax = 100
-			power = 10
+			power = 35
 			armour = 21
 
 	verb
@@ -954,12 +1003,13 @@ mob
 
 			if (usr.hp <= 0)
 				usr << "[usr] is too hurt to battle! Go heal!"
-			if (ispath(src,/mob/poisoned))
-				usr.poison += rand(1,4)
+			if (istype(src,/mob/poisoned))
+				usr.poison += rand(1,2)
+				usr << "[usr] is poisoned a tiny bit."
 				PoisonCheck()
 //begining of weapon attacks
-			else if (equip == "blade")								//check if your weilding the blade
-				damage = rand(4,40) + (power * 2) - src.armour
+			if (equip == "blade")								//check if your weilding the blade
+				damage = rand(4,40) + ((usr.power + usr.pp) * 2) - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
@@ -968,7 +1018,7 @@ mob
 					src.DeathCheck()									//check if mob died
 
 			else if (equip == "staff")								//check if your weilding the staff
-				damage = rand(4,40) + power - src.armour
+				damage = rand(4,40) + usr.power + usr.pp - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
@@ -979,7 +1029,7 @@ mob
 					usr << "[usr] could not regain health from [src]."
 				else
 					var/heal
-					heal = rand(4,32)
+					heal = rand(4,10)
 					if (usr.hpmax <= usr.hp + heal)
 						usr.hp = usr.hpmax
 						usr << "[usr] is restored to full health."
@@ -988,35 +1038,35 @@ mob
 						usr << "[usr] regained [heal] health."
 
 			else if (equip == "spear")									//check if your weilding the spear
-				damage = rand(3,30) + power	//No armour reduction
+				damage = rand(3,30) + usr.power + usr.pp //No armour reduction
 				usr << "[usr] attacks [src] for [damage] damage!"
 				src.hp -= damage
 				src.DeathCheck()
 			else if (equip == "force")							//check if your weilding the force hammer
-				var/crush = rand(1,4)
-				if (ispath(src,/mob/unbreakable))
-					damage = rand(5,50) + power - src.armour
+				var/crush = rand(1,3)
+				if (istype(src,/mob/unbreakable))
+					damage = rand(30,50) + usr.power + usr.pp - src.armour
 					if (damage <= 0)									//check if armour nullifyed the hit
 						usr << "[usr] could not pierce the armour of [src]."
 					else
 						usr << "[usr] attacks [src] for [damage] damage!"
 						src.hp -= damage									//subtract HP from mob
 						src.DeathCheck()									//check if mob died
-				if (crush == 4)
-					src.hp = 0
-					src.DeathCheck()
-					usr << "The Force Hammer crushed [src]."
-					..()
 				else
-					damage = rand(5,50) + power - src.armour
-				if (damage <= 0)									//check if armour nullifyed the hit
-					usr << "[usr] could not pierce the armour of [src]."
-				else
-					usr << "[usr] attacks [src] for [damage] damage!"
-					src.hp -= damage									//subtract HP from mob
-					src.DeathCheck()									//check if mob died
+					if (crush == 3 || (istype(src,/mob/poisoned)&&crush>=2))
+						usr << "The Force Hammer crushed [src]."
+						src.hp = 0
+						src.DeathCheck()
+					else
+						damage = rand(30,50) + usr.power + usr.pp - src.armour
+						if (damage <= 0)									//check if armour nullifyed the hit
+							usr << "[usr] could not pierce the armour of [src]."
+						else
+							usr << "[usr] attacks [src] for [damage] damage!"
+							src.hp -= damage									//subtract HP from mob
+							src.DeathCheck()									//check if mob died
 			else
-				damage = rand(2,20) + power - src.armour
+				damage = rand(2,20) + usr.power + usr.pp - src.armour
 				if (damage <= 0)
 					usr << "[usr] could not pierce [src]\s armour."
 				else
@@ -1039,11 +1089,11 @@ mob
 			if (equip != "cross")
 				usr << "You don't have the crossbow equipped!"
 			else
-				if (usr.bolt < 42)
+				if (usr.bolt < 15)
 					usr << "you don't have enough bolts to fire!"
 				else
-					usr.bolt -= 42
-					damage = rand(4,40)
+					usr.bolt -= 15
+					damage = rand(4,40) + pp
 					usr << "[usr] attacks [src] for [damage] damage!"
 					src.hp -= damage									//subtract HP from mob
 					src.DeathCheck()
@@ -1057,7 +1107,7 @@ mob
 		check()
 			usr << "[usr] has [hp]/[hpmax] health."
 			usr << "[usr] has [bolt] bolts."	//4.solved
-			usr << "[usr] has [power] strength."
+			usr << "[usr] has [usr.power + usr.pp] strength."
 			usr << "[usr] has [potion] potions."
 			usr << "[usr] armour is [armour]."
 			if (usr.poison > 0)
@@ -1088,22 +1138,33 @@ mob
 			if (usr.potion == 0)
 				usr << "You have no potions!"
 			else
-				if (usr.hp >= usr.hpmax - 20)
-					usr << "You are already well."
+				if (usr.hp >= usr.hpmax - 50)
+					usr << "You are already quite well."
 				else
 					usr.potion--
-					usr.hp += 20
-					usr << "You recovered 20 health"
+					usr.hp += 50
+					usr << "You recovered 50 health"
+
+	//cheat codes
 		passive()
 			set hidden = 1
-			if (density	== 1)
-				density = 0
+			if (usr.density	== 1)
+				usr.density = 0
 			else
-				density = 1
-/*
-		say(msg as text)
-			world << "[usr]: [msg]"
-*/
+				usr.density = 1
+
+		glutton()
+			set hidden = 1
+			usr.bolt = 999
+
+		power()
+			set hidden = 1
+			usr.pp = 999
+
+		pots()
+			set hidden = 1
+			usr.potion = 99
+
 		set_name(N as text)
 			set desc = "(\"new name\") Change your name."
 			name = N
@@ -1112,31 +1173,37 @@ mob
 			if (equip != null)
 				equip = null
 				usr << "[usr] is now wielding nothing."
+				usr.power = 4
 		blade()
 			set hidden = 1
 			if (wblade == 1)
 				equip = "blade"
 				usr << "[usr] is now wielding the radiant blade."
+				usr.power = 8
 		cross()
 			set hidden = 1
 			if (wcross == 1)
 				equip = "cross"
 				usr << "[usr] is now wielding the gluttony crossbow."
+				usr.power = 10
 		staff()
 			set hidden = 1
 			if (wstaff == 1)
 				equip = "staff"
 				usr << "[usr] is now wielding the youth staff."
+				usr.power = 12
 		spear()
 			set hidden = 1
 			if (wspear == 1)
 				equip = "spear"
 				usr << "[usr] is now wielding the critical spear."
+				usr.power = 14
 		force()
 			set hidden = 1
 			if (wforce == 1)
 				equip = "force"
 				usr << "[usr] is now wielding the force hammer."
+				usr.power = 20
 
 	proc
 		DeathCheck()
@@ -1159,6 +1226,8 @@ mob
 		PoisonCheck()
 			if (poison >= 100)
 				usr.loc = locate(9,9,15)
+			else if (poison >= 75)
+				usr << "You are badly poisoned."
 			..()
 
 
@@ -1202,7 +1271,7 @@ boss
 				usr << "[usr] is too hurt to battle! Go heal!"
 //begining of weapon attacks
 			else if (equip == "blade")								//check if your weilding the blade
-				damage = rand(4,40) + (power * 2) - src.armour
+				damage = rand(4,40) + ((usr.power + usr.pp) * 2) - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of Queen Moth."
 				else
@@ -1210,7 +1279,7 @@ boss
 					src.hp -= damage									//subtract HP from mob
 					src.DeathCheck()									//check if mob died
 			else
-				damage = rand(2,20) + power - src.armour
+				damage = rand(2,20) + usr.power + usr.pp - src.armour
 				if (damage <= 0)
 					usr << "[usr] could not pierce Queen Moth's armour"
 				else
@@ -1266,7 +1335,7 @@ boss
 				usr << "[usr] is too hurt to battle! Go heal!"
 //begining of weapon attacks
 			else if (equip == "blade")								//check if your weilding the blade
-				damage = rand(4,40) + (power * 2) - src.armour
+				damage = rand(4,40) + ((usr.power + usr.pp) * 2) - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
@@ -1275,7 +1344,7 @@ boss
 					src.DeathCheck()									//check if mob died
 
 			else if (equip == "staff")								//check if your weilding the staff
-				damage = rand(4,40) + power - src.armour
+				damage = rand(4,40) + usr.power + usr.pp- src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
@@ -1283,7 +1352,7 @@ boss
 					usr << "[usr] attacks [src] for [damage] damage!"
 					src.hp -= damage									//subtract HP from mob
 					src.DeathCheck()
-					heal = rand(4,32)
+					heal = rand(40,60)
 					if (usr.hpmax <= usr.hp + heal)
 						usr.hp = usr.hpmax
 						usr << "[usr] is restored to full health."
@@ -1301,11 +1370,11 @@ boss
 			if (equip != "cross")
 				usr << "You don't have the crossbow equipped!"
 			else
-				if (usr.bolt < 42)
+				if (usr.bolt < 15)
 					usr << "You don't have enough bolts to fire!"
 				else
 					var/damage
-					usr.bolt -= 42
+					usr.bolt -= 15
 					usr << "[src] evaded the shot easily."
 					damage = rand(4,40) + src.power
 					usr << "[src] sends a fireball for [damage] damage."
@@ -1325,14 +1394,14 @@ boss
 				usr << "[usr] is too hurt to battle! Go heal!"
 //begining of weapon attacks
 			else if (equip == "blade")								//check if your weilding the blade
-				damage = rand(4,40) + (power * 2) - src.armour
+				damage = rand(4,40) + ((usr.power + usr.pp)* 2) - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
 					usr << "[usr] attacks [src] for [damage] damage!"
 					src.hp -= damage
 			else if (equip == "staff")								//check if your weilding the staff
-				damage = rand(4,40) + power - src.armour
+				damage = rand(4,40) + usr.power + usr.pp - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
@@ -1340,11 +1409,11 @@ boss
 					src.hp -= damage									//subtract HP from mob
 					usr << "[usr] could not regain health from [src]."
 			else if (equip == "spear")									//check if your weilding the spear
-				damage = rand(3,30) + power	//No armour reduction
+				damage = rand(3,30) + power	+ pp //No armour reduction
 				usr << "[usr] attacks [src] for [damage] damage!"
 				src.hp -= damage
 			else if (equip == "force")							//check if your weilding the force hammer
-				damage = rand(5,50) + power - src.armour
+				damage = rand(30,50) + usr.power + usr.pp - src.armour
 				if (damage <= 0)									//check if armour nullifyed the hit
 					usr << "[usr] could not pierce the armour of [src]."
 				else
@@ -1354,10 +1423,11 @@ boss
 				usr << "[usr] flails thier arms wildly."
 				usr << "Fruit: ..."
 //end of weapon attacks
-			usr.poison += 5
+			usr.poison += rand(3,7)
+			usr << "Fruit poisons [usr] significantly"
 			usr.PoisonCheck()
 			if (src.hp <= 0)
-				new/obj/warp/warpFinal(src.loc)
+				new/obj/warp/warpFinal(locate(9,9,13))
 				src.DeathCheck()
 			else
 				for (var/mob/poisoned/fruit/F in world)
@@ -1372,23 +1442,22 @@ boss
 			if (equip != "cross")
 				usr << "You don't have the crossbow equipped!"
 			else
-				if (usr.bolt < 42)
+				if (usr.bolt < 15)
 					usr << "You don't have enough bolts to fire!"
 				else
 					var/damage
-					usr.bolt -= 42
+					usr.bolt -= 15
 					damage = rand(5,40)
 					usr << "[usr] attacks the fruit."
 					usr << "[src] took [damage] damage."
 					src.hp -= damage			//subtract HP from mob
 					if (src.hp <= 0)
-						new/obj/warp/warpFinal(src.loc)
+						new/obj/warp/warpFinal(locate(9,9,13))
 						src.DeathCheck()
 					else
 						usr << "Something seems wrong..."
-						damage = rand(1,42) + src.power - usr.armour
+						damage = rand(10,50) + src.power
 						usr << "The evil fruit sends a nuke for [damage] damage."
 						usr << "Woah! That felt strangely powerful."
-						src.power += 5
-						usr.hp -= src.power
+						usr.hp -= damage
 						usr.UsrDeath()
